@@ -44,13 +44,19 @@ class JSONRPCResponse:
 
     Base class for the responses. There should be no need to validate the input data to
     these responses, since the data hass passed the jsonschema validation.
+    
+    ***BY: talbiston*** Adding a hack here because i do not know how to override jsonrpc validators.
+    Yeah it would be nice if we lived in a world where everone kept to the correct standard but I 
+    I also need to us this package too.. I cannot control what a company does when using the jsonrpc 
+    protocol in there API. 
     """
 
     ok = False
 
-    def __init__(self, jsonrpc: str, id: Any) -> None:
+    def __init__(self, id: Any, session: str, jsonrpc: str = '2.0') -> None:
         self.jsonrpc = jsonrpc
         self.id = id
+        self.session = session
 
 
 class SuccessResponse(JSONRPCResponse):
@@ -85,7 +91,7 @@ class NotificationResponse(SuccessResponse):
 
     def __repr__(self) -> str:
         return "<NotificationResponse()>"
-
+        print(f"\n\n\n\n\n{kwargs}\n\n\n\n\n\n")
     def __str__(self) -> str:
         return ""
 
