@@ -86,7 +86,7 @@ class Notification(dict, metaclass=_RequestClassType):  # type: ignore
     Returns:
         The JSON-RPC request in dictionary form.
     """
-
+    base_list = []
     def __init__(self, method: str, *args: Any, **kwargs: Any) -> None:
         super().__init__(jsonrpc="2.0", method=method)
         # Add the params to self.
@@ -102,7 +102,8 @@ class Notification(dict, metaclass=_RequestClassType):  # type: ignore
         elif args:
             self.update(params=list(args))
         elif kwargs:
-            self.update(params=kwargs)
+            base_list.append(kwargs)
+            self.update(params=base_list)
 
     def __str__(self) -> str:
         """Wrapper around request, returning a string instead of a dict"""
@@ -147,3 +148,5 @@ class Request(Notification):
         # We call super last, after popping the request_id
         super().__init__(method, *args, **kwargs)
         self.update(id=id_)
+        if "session" in kwargs:
+            self.update(session=kwargs.pop('session', None))
