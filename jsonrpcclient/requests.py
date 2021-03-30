@@ -146,7 +146,11 @@ class Request(Notification):
             )
             id_ = next(id_generator)
         # We call super last, after popping the request_id
+        ses = False
+        if "session" in kwargs:
+            _session = kwargs.pop('session', None)
+            ses = True
         super().__init__(method, *args, **kwargs)
         self.update(id=id_)
-        if "session" in kwargs:
-            self.update(session=kwargs.pop('session', None))
+        if ses:
+            self.update(session=_session)
